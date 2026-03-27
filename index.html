@@ -207,21 +207,24 @@
             transform: translateY(-2px);
         }
         .category-btn {
-            background: linear-gradient(135deg, #ff5e78, #ff7fa0);
-            color: white;
+            background: linear-gradient(135deg, #FF006E, #FF1493);
+            color: #00F0FF;
+            box-shadow: 0 0 20px rgba(255, 0, 110, 0.6);
         }
         .category-btn:hover {
-            background: linear-gradient(135deg, #ff7fa0, #ff5e78);
+            background: linear-gradient(135deg, #FF1493, #9D00FF);
+            color: white;
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.9), 0 0 15px rgba(157, 0, 255, 0.7);
         }
         .category-btn.active {
-            background: linear-gradient(135deg, #ff2550, #ff5e78);
+            background: linear-gradient(135deg, #FF006E, #9D00FF);
             color: white;
-            box-shadow: 0 8px 30px rgba(255, 94, 120, 0.5);
+            box-shadow: 0 0 40px rgba(255, 0, 110, 1), 0 0 20px rgba(157, 0, 255, 0.8);
             transform: scale(1.08);
-            border: 2px solid white;
+            border: 2px solid #00F0FF;
         }
         .category-btn.inactive {
-            opacity: 0.4;
+            opacity: 0.3;
         }
         .question-box {
             background: linear-gradient(135deg, rgba(10, 0, 21, 0.8) 0%, rgba(26, 0, 51, 0.8) 100%);
@@ -313,18 +316,22 @@
         }
         .counter {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
+            color: #00F0FF;
             font-weight: 600;
             cursor: default;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
         }
         .reset-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
+            background: rgba(157, 0, 255, 0.2);
+            color: #9D00FF;
+            border: 2px solid #9D00FF;
+            box-shadow: 0 0 10px rgba(157, 0, 255, 0.5);
         }
         .reset-btn:hover {
-            background: white;
-            color: #ff5e78;
+            background: #9D00FF;
+            color: #00F0FF;
+            border-color: #00F0FF;
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.8), 0 0 10px rgba(0, 240, 255, 0.6);
         }
         .confetti-piece {
             position: fixed;
@@ -332,14 +339,18 @@
             font-size: 20px;
         }
         .share-btn {
-            background: rgba(100, 200, 255, 0.8);
-            color: white;
-            border: 2px solid white;
+            background: rgba(0, 240, 255, 0.2);
+            color: #00F0FF;
+            border: 2px solid #00F0FF;
             padding: 8px 14px;
             font-size: 12px;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
         .share-btn:hover {
-            background: rgba(100, 200, 255, 1);
+            background: #00F0FF;
+            color: #FF006E;
+            border-color: #FF006E;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.8), 0 0 10px rgba(255, 0, 110, 0.6);
         }
     </style>
 </head>
