@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Fun Guaranteed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                scale: 0.9;
+            }
+            to {
+                opacity: 1;
+                scale: 1;
+            }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 8px 20px rgba(255, 94, 120, 0.4); }
+        }
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes spinSlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(255, 198, 210, 0.95), rgba(255, 224, 210, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+        .navbar.active {
+            display: flex;
+            animation: slideIn 0.6s ease-out;
+        }
+        .navbar-content {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            border: 2px solid rgba(255, 94, 120, 0.3);
+            border-radius: 25px;
+            background: white;
+            color: #ff5e78;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .nav-tab:hover {
+            background: #ff5e78;
+            color: white;
+            border-color: #ff5e78;
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, #ff5e78, #ff7fa0);
+            color: white;
+            border-color: #ff5e78;
+            box-shadow: 0 6px 20px rgba(255, 94, 120, 0.4);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #ffecd2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+        body.navbar-active {
+            padding-top: 100px;
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 48px;
+            animation: slideIn 0.6s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        h1.hidden {
+            display: none;
+        }
+        .spinner-container {
+            display: none;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .spinner-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .wheel {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+            animation: slideIn 0.6s ease-out 0.2s both;
+        }
+        .button-container.hidden {
+            display: none;
+        }
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 30px;
+            background-color: #fff;
+            color: #ff5e78;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        button:hover::before {
+            left: 100%;
+        }
+        button:hover {
+            background-color: #ff5e78;
+            color: #fff;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 94, 120, 0.4);
+        }
+        button:active {
+            transform: translateY(-2px);
+        }
+        .category-btn {
+            background: linear-gradient(135deg, #ff5e78, #ff7fa0);
+            color: white;
+        }
+        .category-btn:hover {
+            background: linear-gradient(135deg, #ff7fa0, #ff5e78);
+        }
+        .category-btn.active {
+            background: linear-gradient(135deg, #ff2550, #ff5e78);
+            color: white;
+            box-shadow: 0 8px 30px rgba(255, 94, 120, 0.5);
+            transform: scale(1.08);
+            border: 2px solid white;
+        }
+        .category-btn.inactive {
+            opacity: 0.4;
+        }
+        .question-box {
+            background: linear-gradient(135deg, #ffffff 0%, #fff5f7 100%);
+            padding: 40px 30px;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            font-size: 21px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            min-height: 140px;
+            animation: fadeIn 0.5s ease-out;
+            line-height: 1.8;
+            font-weight: 500;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 94, 120, 0.1);
+        }
+        .question-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 94, 120, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        .question-box::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(250, 208, 196, 0.15) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+        .question-box.active {
+            animation: bounce 0.6s ease-out;
+            box-shadow: 0 20px 60px rgba(255, 94, 120, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        .question-text {
+            position: relative;
+            z-index: 1;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideIn 0.6s ease-out 0.3s both;
+        }
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #ff5e78;
+            border: 2px solid #ff5e78;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .nav-btn:hover {
+            background: #ff5e78;
+            color: white;
+            transform: scale(1.05);
+        }
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .counter {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+        .reset-btn:hover {
+            background: white;
+            color: #ff5e78;
+        }
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+        }
+        .share-btn {
+            background: rgba(100, 200, 255, 0.8);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 14px;
+            font-size: 12px;
+        }
+        .share-btn:hover {
+            background: rgba(100, 200, 255, 1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <button class="nav-tab" id="nav-never" onclick="selectCategory('never')">🚫 Never Have I Ever</button>
+            <button class="nav-tab" id="nav-dare" onclick="selectCategory('dare')">🎭 Dares</button>
+            <button class="nav-tab" id="nav-rapid" onclick="selectCategory('rapid')">⚡ Rapid Fire</button>
+            <button class="nav-tab" id="nav-know" onclick="selectCategory('know')">🧠 Who Knows Me</button>
+        </div>
+    </nav>
+    <h1 id="mainTitle">🎉 Fun Guaranteed 🎉</h1>
+    <div class="button-container" id="buttonContainer">
+        <button class="category-btn" id="btn-never" onclick="startCategory('never')">🚫 Never Have I Ever</button>
+        <button class="category-btn" id="btn-dare" onclick="startCategory('dare')">🎭 Choose a Dare</button>
+        <button class="category-btn" id="btn-rapid" onclick="startCategory('rapid')">⚡ Rapid Fire</button>
+        <button class="category-btn" id="btn-know" onclick="startCategory('know')">🧠 Who Knows Me</button>
+    </div>
+    <div class="spinner-container" id="spinnerContainer">
+        <div class="wheel">🎡</div>
+        <p style="color: #fff; font-size: 18px; font-weight: 600;">Spinning...</p>
+    </div>
+    <div class="question-box" id="questionBox">
+        <div class="question-text">👉 Click a category to start the fun 😄</div>
+    </div>
+    <div class="controls">
+        <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" style="display:none;">← Previous</button>
+        <span class="counter" id="counter"></span>
+        <button class="nav-btn" id="nextBtn" onclick="nextQuestion()" style="display:none;">Next →</button>
+        <button class="share-btn" id="shareBtn" onclick="copyQuestion()" style="display:none;">📋 Copy</button>
+        <button class="reset-btn" id="resetBtn" onclick="resetGame()" style="display:none;">🔄 Back</button>
+    </div>
+    <script>
+        const questions = {
+            never: [
+                "Never have I ever stalked someone on Instagram for hours",
+                "Never have I ever re-watched my own story multiple times",
+                "Never have I ever cancelled plans last minute",
+                "Never have I ever worn the same outfit without washing 😁",
+                "Never have I ever judged someone silently",
+                "Never have I ever stolen my roommate’s clothes",
+                "Never have I ever fought over something stupid",
+                "Never have I ever bitched about a friend and then acted normal",
+                "Never have I ever ignored calls intentionally",
+                "Never have I ever eavesdropped on someone’s conversation",
+                "Never have I ever blamed someone else for my mistakes",
+                "Never have I ever had a crush on more than one person at a time",
+                "Never have I ever stalked my crush’s entire profile",
+                "Never have I ever gone back to an ex (even emotionally 😉)",
+                "Never have I ever cried over a relationship",
+                "Never have I ever had a crush on someone while being in a relationship",
+                "Never have I ever flirted just to get attention",
+                "Never have I ever checked someone’s phone secretly 👀",
+                "Never have I ever had a secret crush in office",
+                "Never have I ever lied in a relationship",
+                "Never have I ever been jealous of a friend",
+                "Never have I ever stalked my ex’s new partner",
+                "Never have I ever pretended to like someone I don’t",
+                "Never have I ever ghosted someone",
+                "Never have I ever flirted with someone’s crush",
+                "Never have I ever doubted my partner",
+                "Never have I ever imagined married life and got scared",
+                "Never have I ever annoyed my partner intentionally",
+                "Never have I ever kept secrets from my partner",
+                "Never have I ever felt 'I got lucky with him"
+            ],
+            dare: [
+                "Do a catwalk like a Bollywood diva",
+                "Talk in a fake accent for next 2 minutes",
+                "Act like the bride getting ready for her wedding 😁",
+                "Imitate another person in the group until someone guesses",
+                "Do 10-second stand-up comedy about roommates",
+                "Dance to a random Bollywood song for 1 minute",
+                "Do a slow-motion romantic entry like a movie heroine",
+                "Recreate a famous scene (DDLJ / Kabhi Khushi Kabhie Gham 😄)",
+                "Do a naagin dance dramatically",
+                "Perform like you're in a music video shoot",
+                "Send a random emoji to the 5th contact on your phone",
+                "Call a friend and talk in a dramatic serial tone",
+                "Post a funny selfie (only if comfortable)",
+                "Text 'I have a secret to tell you' and don’t reply for 10 mins 😉",
+                "Let others pick a WhatsApp status for you",
+                "Reveal your last crush 👀",
+                "Show your last 5 emojis used",
+                "Tell one secret you’ve never told the group",
+                "Recreate your first date story dramatically",
+                "Say one thing you’re jealous of about the bride 😄",
+                "Let others roast you for 1 minute",
+                "Mimic your partner/crush in an exaggerated way",
+                "Share your most embarrassing drunk/messy moment",
+                "Swap phones for 2 minutes (no sending messages 😜)",
+                "Say your biggest red flag 🚩",
+                "Call the groom and say something funny/filmy",
+                "Do a proposal to an imaginary person dramatically",
+                "Describe married life after 1 year (funny version 😂)",
+                "Recreate how she flirts with her partner",
+                "Dance to 'London Thumakda' like full bride energy 💃",
+                "Everyone does a synchronized dance",
+                "Create a short reel/skit together",
+                "Do a group ramp walk with attitude",
+                "Sing a song together loudly (off-key allowed 😁)"
+            ],
+            rapid: [
+                "Who said 'I love you' first?",
+                "Who is more romantic?",
+                "Who is more expressive?",
+                "Who apologizes first?",
+                "Who is more mature?",
+                "Who is more emotional?",
+                "Who wakes up first?",
+                "Who is always late?",
+                "Who takes more time to get ready?",
+                "Who is messier?",
+                "Who spends more money?",
+                "Who saves more?",
+                "Who eats more?",
+                "Who orders food more often?",
+                "Who is more picky?",
+                "Who controls what to eat?",
+                "Who experiments with food more?",
+                "Who will plan trips?",
+                "Who is more career-focused?",
+                "Who gets jealous more? 👀",
+                "Who flirts more?",
+                "Who is more possessive?",
+                "Who makes up first after a fight?",
+                "Who is more likely to forget anniversaries? 😄",
+                "Who will control the TV remote?",
+                "Who will do more household work?",
+                "Who will sleep first?",
+                "Who will snore? 😂",
+                "Who will win arguments long term?",
+                "Who starts fights? 😉",
+                "Who ends fights?",
+                "Who gives the silent treatment?",
+                "Who overthinks more?",
+                "Who says 'I'm fine' but isn't? 😂",
+                "Who is more social?",
+                "Who is more dramatic?",
+                "Who cracks more jokes?",
+                "Who is more stubborn?",
+                "Who is more chill?",
+                "Who will handle finances?",
+                "Who will spend on luxury?"
+            ],
+            know: [
+                "Her most used dialogue at home",
+                "Her weirdest habit",
+                "Something she always procrastinates",
+                "Her midnight go-to snack",
+                "What does she say when she's late",
+                "Her most repeated outfit",
+                "Her typical rant topic",
+                "Who fell first - her or groom?",
+                "What is her pet name for him",
+                "What does she complain about him the most",
+                "Most embarrassing moment at home",
+                "Most funniest fight",
+                "Any inside joke only you understand",
+                "Her drama queen moment",
+                "One lie she often tells"
+            ]
+        };
+        const categoryNames = {
+            never: "🚫 Never Have I Ever",
+            dare: "🎭 Dares",
+            rapid: "⚡ Rapid Fire",
+            know: "🧠 Who Knows Me"
+        };
+        let currentCategory = null;
+        let currentIndex = 0;
+        let currentQuestion = "";
+        let isSpinning = false;
+        function startCategory(type) {
+            selectCategory(type);
+        }
+        function selectCategory(type) {
+            if (isSpinning) return;
+            currentCategory = type;
+            currentIndex = 0;
+            
+            document.getElementById("buttonContainer").classList.add("hidden");
+            document.getElementById("mainTitle").classList.add("hidden");
+            document.getElementById("navbar").classList.add("active");
+            document.body.classList.add("navbar-active");
+            updateNavbarTabs();
+            
+            spinWheel();
+        }
+        function updateNavbarTabs() {
+            const categories = ['never', 'dare', 'rapid', 'know'];
+            categories.forEach(cat => {
+                const tab = document.getElementById(`nav-${cat}`);
+                if (cat === currentCategory) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+            
+            const spinnerContainer = document.getElementById("spinnerContainer");
+            spinnerContainer.classList.add("active");
+            document.getElementById("questionBox").style.visibility = "hidden";
+            document.getElementById("prevBtn").style.display = "none";
+            document.getElementById("nextBtn").style.display = "none";
+            document.getElementById("shareBtn").style.display = "none";
+            document.getElementById("resetBtn").style.display = "none";
+            document.getElementById("counter").innerText = "";
+            
+            const spinDuration = 2000 + Math.random() * 1000;
+            
+            setTimeout(() => {
+                spinnerContainer.classList.remove("active");
+                isSpinning = false;
+                selectRandomQuestion();
+                showQuestion();
+                updateUI();
+            }, spinDuration);
+        }
+        function selectRandomQuestion() {
+            const list = questions[currentCategory];
+            currentIndex = Math.floor(Math.random() * list.length);
+            currentQuestion = list[currentIndex];
+        }
+        function showQuestion() {
+            if (!currentCategory) return;
+            const box = document.getElementById("questionBox");
+            const textDiv = box.querySelector('.question-text');
+            box.classList.remove("active");
+            box.style.visibility = "visible";
+            setTimeout(() => {
+                textDiv.innerText = currentQuestion;
+                box.classList.add("active");
+            }, 10);
+            updateCounter();
+            createConfetti();
+        }
+        function nextQuestion() {
+            if (!currentCategory || isSpinning) return;
+            spinWheel();
+        }
+        function previousQuestion() {
+            if (!currentCategory || isSpinning) return;
+            spinWheel();
+        }
+        function resetGame() {
+            currentCategory = null;
+            currentIndex = 0;
+            currentQuestion = "";
+            isSpinning = false;
+            
+            document.getElementById("navbar").classList.remove("active");
+            document.getElementById("buttonContainer").classList.remove("hidden");
+            document.getElementById("mainTitle").classList.remove("hidden");
+            document.getElementById("spinnerContainer").classList.remove("active");
+            document.body.classList.remove("navbar-active");
+            
+            document.getElementById("questionBox").style.visibility = "hidden";
+            document.getElementById("questionBox").querySelector('.question-text').innerText = "👉 Click a category to start the fun 😄";
+            document.getElementById("prevBtn").style.display = "none";
+            document.getElementById("nextBtn").style.display = "none";
+            document.getElementById("shareBtn").style.display = "none";
+            document.getElementById("resetBtn").style.display = "none";
+            document.getElementById("counter").innerText = "";
+        }
+        function updateUI() {
+            if (!currentCategory) {
+                document.getElementById("prevBtn").style.display = "none";
+                document.getElementById("nextBtn").style.display = "none";
+                document.getElementById("shareBtn").style.display = "none";
+                document.getElementById("resetBtn").style.display = "none";
+                return;
+            }
+            document.getElementById("prevBtn").style.display = "inline-block";
+            document.getElementById("nextBtn").style.display = "inline-block";
+            document.getElementById("shareBtn").style.display = "inline-block";
+            document.getElementById("resetBtn").style.display = "inline-block";
+        }
+        function updateCounter() {
+            if (!currentCategory) return;
+            const list = questions[currentCategory];
+            document.getElementById("counter").innerText = `${currentIndex + 1} / ${list.length}`;
+        }
+        function copyQuestion() {
+            if (currentQuestion) {
+                navigator.clipboard.writeText(currentQuestion).then(() => {
+                    const btn = document.getElementById("shareBtn");
+                    const original = btn.innerText;
+                    btn.innerText = "✅ Copied!";
+                    setTimeout(() => {
+                        btn.innerText = original;
+                    }, 2000);
+                });
+            }
+        }
+        function createConfetti() {
+            const emojis = ['🎉', '🎊', '🎈', '💕', '😄', '🌟', '✨', '💯'];
+            for (let i = 0; i < 8; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-20px';
+                confetti.style.animation = `confetti ${2 + Math.random() * 1}s ease-in forwards`;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+    </script>
+</body>
+</html>
